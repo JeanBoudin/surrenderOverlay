@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>SurrenderOverlay Changelog</title>
+        <link>https://raw.githubusercontent.com/VOTRE-USERNAME/SurrenderOverlay/main/appcast.xml</link>
+        <description>Most recent updates to SurrenderOverlay</description>
+        <language>fr</language>
+
+        <!-- Example release - à mettre à jour pour chaque nouvelle version -->
+        <item>
+            <title>Version 1.0.0</title>
+            <sparkle:releaseNotesLink>
+                https://github.com/VOTRE-USERNAME/SurrenderOverlay/releases/tag/v1.0.0
+            </sparkle:releaseNotesLink>
+            <pubDate>Thu, 19 Dec 2024 12:00:00 +0000</pubDate>
+            <enclosure
+                url="https://github.com/VOTRE-USERNAME/SurrenderOverlay/releases/download/v1.0.0/SurrenderOverlay.zip"
+                sparkle:version="1.0.0"
+                sparkle:shortVersionString="1.0.0"
+                length="220000"
+                type="application/octet-stream"
+            />
+        </item>
+    </channel>
+</rss>

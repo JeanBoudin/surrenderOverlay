@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
+	<key>CFBundleExecutable</key>
+	<string>SurrenderOverlay</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.tonnom.SurrenderOverlay</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>SurrenderOverlay</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>15.5</string>
+	<key>LSUIElement</key>
+	<true/>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>SurrenderOverlay utilise le réseau local pour découvrir et se connecter aux autres Macs sur votre réseau WiFi.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_surr-vote._tcp</string>
+		<string>_surr-vote._udp</string>
+	</array>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/VOTRE-USERNAME/SurrenderOverlay/main/appcast.xml</string>
+	<key>SUEnableAutomaticChecks</key>
+	<true/>
+	<key>SUScheduledCheckInterval</key>
+	<integer>86400</integer>
+</dict>
+</plist>
