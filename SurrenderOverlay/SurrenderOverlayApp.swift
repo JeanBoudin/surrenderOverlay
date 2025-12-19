@@ -160,7 +160,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
                 // Send surrender
                 let sendItem = NSMenuItem(
-                    title: "Send Surrender 🏴",
+                    title: "Surrender 🏴",
                     action: #selector(sendSurrender(_:)),
                     keyEquivalent: ""
                 )
@@ -170,7 +170,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
                 // Send coffee
                 let coffeeItem = NSMenuItem(
-                    title: "Send Coffee ☕️",
+                    title: "Coffee ☕️",
                     action: #selector(sendCoffee(_:)),
                     keyEquivalent: ""
                 )
@@ -180,7 +180,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
                 // Send fatigue alert
                 let fatigueItem = NSMenuItem(
-                    title: "Send Fatigue Alert 😴",
+                    title: "Fatigue Alert 😴",
                     action: #selector(sendFatigueAlert(_:)),
                     keyEquivalent: ""
                 )
@@ -190,7 +190,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
                 // Send GoodBoy
                 let goodBoyItem = NSMenuItem(
-                    title: "Send GoodBoy 🐕",
+                    title: "GoodBoy 🐕",
                     action: #selector(sendGoodBoy(_:)),
                     keyEquivalent: ""
                 )
