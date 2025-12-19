@@ -30,7 +30,7 @@
 		<string>_surr-vote._udp</string>
 	</array>
 	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/VOTRE-USERNAME/SurrenderOverlay/main/appcast.xml</string>
+	<string>https://raw.githubusercontent.com/JeanBoudin/surrenderOverlay/main/appcast.xml</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
 	<key>SUScheduledCheckInterval</key>
