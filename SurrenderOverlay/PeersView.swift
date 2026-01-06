@@ -1,24 +1,31 @@
 import SwiftUI
-import MultipeerConnectivity
 
 struct PeersView: View {
-    @ObservedObject var peerService: PeerService
+    @ObservedObject var peerService: WebSocketPeerService
     let overlayService: OverlayService
 
     @State private var duration: Double = 12
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("P2P LAN – Surrender")
+            Text("WebSocket – Surrender")
                 .font(.title2)
 
             HStack {
-                Text("Moi : \(peerService.myPeerID.displayName)")
+                Circle()
+                    .fill(peerService.isConnected ? Color.green : Color.red)
+                    .frame(width: 10, height: 10)
+
+                Text(peerService.isConnected ? "Connected to server" : "Disconnected")
+                    .font(.subheadline)
+                    .opacity(0.8)
+
                 Spacer()
-                Text("Connectés : \(peerService.connectedPeers.count)")
+
+                Text("Peers: \(peerService.connectedPeers.count)")
+                    .font(.subheadline)
+                    .opacity(0.8)
             }
-            .font(.subheadline)
-            .opacity(0.8)
 
             Divider()
 
@@ -94,31 +101,48 @@ struct PeersView: View {
 
             Divider()
 
-            Text("Peers trouvés")
+            Text("Connected Peers")
                 .font(.headline)
 
-            List(peerService.foundPeers, id: \.self) { peer in
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text(peer.displayName)
-                        Text(peerService.connectedPeers.contains(peer) ? "Connecté" : "Non connecté")
+            if peerService.connectedPeers.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "network.slash")
+                        .font(.system(size: 48))
+                        .foregroundColor(.secondary)
+
+                    Text("No peers connected")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+
+                    if !peerService.isConnected {
+                        Text("Reconnecting to server...")
                             .font(.caption)
-                            .opacity(0.7)
+                            .foregroundColor(.orange)
                     }
-                    Spacer()
-
-                    Button("Connect") {
-                        peerService.connect(to: peer)
-                    }
-                    .disabled(peerService.connectedPeers.contains(peer))
-
-                    Button("Send Surrender") {
-                        peerService.sendSurrenderRequest(to: peer, duration: duration)
-                    }
-                    .disabled(!peerService.connectedPeers.contains(peer))
                 }
+                .frame(maxWidth: .infinity, minHeight: 200)
+            } else {
+                List(peerService.connectedPeers) { peer in
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(peer.displayName)
+                                .font(.headline)
+
+                            Text(peer.peerId)
+                                .font(.caption)
+                                .opacity(0.7)
+                        }
+                        Spacer()
+
+                        Button("Send Surrender") {
+                            peerService.sendSurrenderRequest(to: peer, duration: duration)
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    .padding(.vertical, 8)
+                }
+                .frame(minHeight: 200)
             }
-            .frame(minHeight: 260)
 
             Spacer()
         }

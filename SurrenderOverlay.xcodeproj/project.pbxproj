@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E17F13CE2F0BDE4F00176CD9 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = E17F13CD2F0BDE4F00176CD9 /* Starscream */; };
 		E1D2B94A2EF54936006E28F3 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = E1D2B9492EF54936006E28F3 /* Sparkle */; };
 /* End PBXBuildFile section */
 
@@ -28,6 +29,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E1D2B94A2EF54936006E28F3 /* Sparkle in Frameworks */,
+				E17F13CE2F0BDE4F00176CD9 /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +73,7 @@
 			name = SurrenderOverlay;
 			packageProductDependencies = (
 				E1D2B9492EF54936006E28F3 /* Sparkle */,
+				E17F13CD2F0BDE4F00176CD9 /* Starscream */,
 			);
 			productName = SurrenderOverlay;
 			productReference = E1D2B8F42EF439E5006E28F3 /* SurrenderOverlay.app */;
@@ -102,6 +105,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				E1D2B9482EF54936006E28F3 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				E17F13CC2F0BDE4F00176CD9 /* XCRemoteSwiftPackageReference "Starscream" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E1D2B8F52EF439E5006E28F3 /* Products */;
@@ -332,6 +336,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E17F13CC2F0BDE4F00176CD9 /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.8;
+			};
+		};
 		E1D2B9482EF54936006E28F3 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sparkle-project/Sparkle";
@@ -343,6 +355,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		E17F13CD2F0BDE4F00176CD9 /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E17F13CC2F0BDE4F00176CD9 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
+		};
 		E1D2B9492EF54936006E28F3 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E1D2B9482EF54936006E28F3 /* XCRemoteSwiftPackageReference "Sparkle" */;

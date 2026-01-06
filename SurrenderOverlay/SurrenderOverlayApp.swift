@@ -1,6 +1,5 @@
 import SwiftUI
 import AppKit
-import MultipeerConnectivity
 import Sparkle
 
 @main
@@ -17,7 +16,8 @@ struct SurrenderOverlayApp: App {
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    let peerService = PeerService()
+    // WebSocket connection to Railway backend
+    let peerService = WebSocketPeerService(serverURL: "wss://surrenderback-production.up.railway.app")
     private let overlay = OverlayService()
     private var statusItem: NSStatusItem?
     private var settingsWindow: NSWindow?
@@ -33,10 +33,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // Setup menu bar
         setupMenuBar()
 
-        // Start P2P service
+        // Start WebSocket service
         peerService.start()
 
-        peerService.onSurrenderRequest = { [weak self] (req: SurrenderRequestPayload, fromPeer: MCPeerID) in
+        peerService.onSurrenderRequest = { [weak self] (req: SurrenderRequestPayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             // Affiche l'overlay
@@ -52,7 +52,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
         }
 
-        peerService.onSurrenderVote = { [weak self] (vote: SurrenderVotePayload, fromPeer: MCPeerID) in
+        peerService.onSurrenderVote = { [weak self] (vote: SurrenderVotePayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             let response = vote.vote == "yes" ? "✅ Yes!" : "❌ No"
@@ -63,7 +63,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             print("✅ Vote reçu de \(fromPeer.displayName): \(vote.vote) (req \(vote.requestId))")
         }
 
-        peerService.onCoffeeRequest = { [weak self] (req: CoffeeRequestPayload, fromPeer: MCPeerID) in
+        peerService.onCoffeeRequest = { [weak self] (req: CoffeeRequestPayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             // Affiche l'overlay
@@ -79,7 +79,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
         }
 
-        peerService.onCoffeeVote = { [weak self] (vote: CoffeeVotePayload, fromPeer: MCPeerID) in
+        peerService.onCoffeeVote = { [weak self] (vote: CoffeeVotePayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             let response = vote.vote == "yes" ? "✅ Yes!" : "❌ No"
@@ -90,7 +90,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             print("☕️ Coffee vote reçu de \(fromPeer.displayName): \(vote.vote) (req \(vote.requestId))")
         }
 
-        peerService.onFatigueAlert = { [weak self] (alert: FatigueAlertPayload, fromPeer: MCPeerID) in
+        peerService.onFatigueAlert = { [weak self] (alert: FatigueAlertPayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             let advice = """
@@ -109,7 +109,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             print("😴 Fatigue alert reçu de \(fromPeer.displayName)")
         }
 
-        peerService.onGoodBoy = { [weak self] (goodBoy: GoodBoyPayload, fromPeer: MCPeerID) in
+        peerService.onGoodBoy = { [weak self] (goodBoy: GoodBoyPayload, fromPeer: WSPeer) in
             guard let self else { return }
 
             self.overlay.presentGoodBoy(fromName: fromPeer.displayName)
@@ -145,6 +145,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func createMenu() -> NSMenu {
         let menu = NSMenu()
 
+        // Connection status
+        let statusText = peerService.isConnected ? "🟢 Connected to server" : "🔴 Disconnected"
+        let statusItem = NSMenuItem(title: statusText, action: nil, keyEquivalent: "")
+        statusItem.isEnabled = false
+        menu.addItem(statusItem)
+
+        menu.addItem(NSMenuItem.separator())
+
         // Connected peers section
         let connectedPeers = peerService.connectedPeers
 
@@ -161,7 +169,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 // Send surrender
                 let sendItem = NSMenuItem(
                     title: "Surrender 🏴",
-                    action: #selector(sendSurrender(_:)),
+                    action: #selector(sendSurrenderWS(_:)),
                     keyEquivalent: ""
                 )
                 sendItem.representedObject = peer
@@ -171,7 +179,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 // Send coffee
                 let coffeeItem = NSMenuItem(
                     title: "Coffee ☕️",
-                    action: #selector(sendCoffee(_:)),
+                    action: #selector(sendCoffeeWS(_:)),
                     keyEquivalent: ""
                 )
                 coffeeItem.representedObject = peer
@@ -181,7 +189,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 // Send fatigue alert
                 let fatigueItem = NSMenuItem(
                     title: "Fatigue Alert 😴",
-                    action: #selector(sendFatigueAlert(_:)),
+                    action: #selector(sendFatigueAlertWS(_:)),
                     keyEquivalent: ""
                 )
                 fatigueItem.representedObject = peer
@@ -191,25 +199,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 // Send GoodBoy
                 let goodBoyItem = NSMenuItem(
                     title: "GoodBoy 🐕",
-                    action: #selector(sendGoodBoy(_:)),
+                    action: #selector(sendGoodBoyWS(_:)),
                     keyEquivalent: ""
                 )
                 goodBoyItem.representedObject = peer
                 goodBoyItem.target = self
                 submenu.addItem(goodBoyItem)
-
-                // Forget peer (only if trusted)
-                if peerService.isTrustedPeer(peer) {
-                    submenu.addItem(NSMenuItem.separator())
-                    let forgetItem = NSMenuItem(
-                        title: "Forget this Mac",
-                        action: #selector(forgetPeer(_:)),
-                        keyEquivalent: ""
-                    )
-                    forgetItem.representedObject = peer
-                    forgetItem.target = self
-                    submenu.addItem(forgetItem)
-                }
 
                 parentItem.submenu = submenu
                 menu.addItem(parentItem)
@@ -249,8 +244,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         return menu
     }
 
-    @objc private func sendSurrender(_ sender: NSMenuItem) {
-        guard let peer = sender.representedObject as? MCPeerID else { return }
+    @objc private func sendSurrenderWS(_ sender: NSMenuItem) {
+        guard let peer = sender.representedObject as? WSPeer else { return }
 
         // Default duration: 12 seconds
         peerService.sendSurrenderRequest(to: peer, duration: 12)
@@ -259,8 +254,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         print("📤 Sending surrender to \(peer.displayName)")
     }
 
-    @objc private func sendCoffee(_ sender: NSMenuItem) {
-        guard let peer = sender.representedObject as? MCPeerID else { return }
+    @objc private func sendCoffeeWS(_ sender: NSMenuItem) {
+        guard let peer = sender.representedObject as? WSPeer else { return }
 
         // Default duration: 12 seconds
         peerService.sendCoffeeRequest(to: peer, duration: 12)
@@ -269,31 +264,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         print("☕️ Sending coffee request to \(peer.displayName)")
     }
 
-    @objc private func sendFatigueAlert(_ sender: NSMenuItem) {
-        guard let peer = sender.representedObject as? MCPeerID else { return }
+    @objc private func sendFatigueAlertWS(_ sender: NSMenuItem) {
+        guard let peer = sender.representedObject as? WSPeer else { return }
 
         peerService.sendFatigueAlert(to: peer)
 
         print("😴 Sending fatigue alert to \(peer.displayName)")
     }
 
-    @objc private func sendGoodBoy(_ sender: NSMenuItem) {
-        guard let peer = sender.representedObject as? MCPeerID else { return }
+    @objc private func sendGoodBoyWS(_ sender: NSMenuItem) {
+        guard let peer = sender.representedObject as? WSPeer else { return }
 
         peerService.sendGoodBoy(to: peer)
 
         print("🐕 Sending GoodBoy to \(peer.displayName)")
-    }
-
-    @objc private func forgetPeer(_ sender: NSMenuItem) {
-        guard let peer = sender.representedObject as? MCPeerID else { return }
-
-        peerService.removeTrustedPeer(peer)
-
-        // Refresh menu
-        statusItem?.menu = createMenu()
-
-        print("🗑️ \(peer.displayName) oublié - reconnexion manuelle nécessaire au prochain redémarrage")
     }
 
     @objc private func openSettings() {
@@ -493,7 +477,7 @@ final class OverlayService {
     private func centerOnActiveScreen() {
         guard let panel else { return }
 
-        // Choix de l’écran : celui où est la souris
+        // Choix de l'écran : celui où est la souris
         let mouse = NSEvent.mouseLocation
         let screen = NSScreen.screens.first(where: { $0.frame.contains(mouse) }) ?? NSScreen.main
 
