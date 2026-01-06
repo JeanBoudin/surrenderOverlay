@@ -15,10 +15,10 @@
             <pubDate>Mon, 06 Jan 2026 10:00:00 +0000</pubDate>
             <enclosure
                     url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.4/SurrenderOverlay-1.0.4.zip"
-                    sparkle:version="3"
+                    sparkle:version="4"
                     sparkle:shortVersionString="1.0.4"
-                    sparkle:edSignature="iGR7dAGff/GltBTY8y4DoR4H2ywwzMSxT1+NBEybVcKCYHfjIwCpCWOEYKGcBrDbyWwJQUkDNu9x94hPXs7Ag=="
-                    length="1328965"
+                    sparkle:edSignature="Cy3VRAlhsM92WhmAb3o3/I2+gHpNkjJrFnNyhPNxyW4wEor/d8spSvtjJQhHrmkWjxlOnj8MS5HfcWUHWXeeAw=="
+                    length="1332911"
                     type="application/octet-stream"
             />
         </item>
