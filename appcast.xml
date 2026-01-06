@@ -8,15 +8,16 @@
 
         <!-- Nouvelle version v1.0.3 -->
         <item>
-            <title>Version 1.0.3</title>
+            <title>Version 1.0.4</title>
             <sparkle:releaseNotesLink>
-                https://github.com/JeanBoudin/surrenderOverlay/releases/tag/v1.0.3
+                https://github.com/JeanBoudin/surrenderOverlay/releases/tag/v1.0.4
             </sparkle:releaseNotesLink>
             <pubDate>Mon, 06 Jan 2026 10:00:00 +0000</pubDate>
             <enclosure
-                    url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.3/SurrenderOverlay-1.0.3.zip"
+                    url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.4/SurrenderOverlay-1.0.4.zip"
                     sparkle:version="3"
-                    sparkle:shortVersionString="1.0.3"
+                    sparkle:shortVersionString="1.0.4"
+                    sparkle:edSignature="iGR7dAGff/GltBTY8y4DoR4H2ywwzMSxT1+NBEybVcKCYHfjIwCpCWOEYKGcBrDbyWwJQUkDNu9x94hPXs7Ag=="
                     length="1328965"
                     type="application/octet-stream"
             />

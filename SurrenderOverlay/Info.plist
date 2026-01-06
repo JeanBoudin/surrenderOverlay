@@ -15,24 +15,26 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.1</string>
+	<string>1.0.4</string>
 	<key>CFBundleVersion</key>
 	<string>2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>15.5</string>
 	<key>LSUIElement</key>
 	<true/>
-	<key>NSLocalNetworkUsageDescription</key>
-	<string>SurrenderOverlay utilise le réseau local pour découvrir et se connecter aux autres Macs sur votre réseau WiFi.</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_surr-vote._tcp</string>
 		<string>_surr-vote._udp</string>
 	</array>
-	<key>SUFeedURL</key>
-	<string>https://raw.githubusercontent.com/JeanBoudin/surrenderOverlay/main/appcast.xml</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>SurrenderOverlay utilise le réseau local pour découvrir et se connecter aux autres Macs sur votre réseau WiFi.</string>
 	<key>SUEnableAutomaticChecks</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/JeanBoudin/surrenderOverlay/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>7O5hiskLSdm4oEvGMU2YqtVWHidgXlxEj5EKvm7eeig=</string>
 	<key>SUScheduledCheckInterval</key>
 	<integer>86400</integer>
 </dict>
