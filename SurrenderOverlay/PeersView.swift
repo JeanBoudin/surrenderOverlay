@@ -145,8 +145,22 @@ struct PeersView: View {
             }
 
             Spacer()
+
+            // Version info
+            HStack {
+                Spacer()
+                Text("Version \(appVersion)")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
         }
         .padding(16)
         .frame(width: 520, height: 580)
+    }
+
+    private var appVersion: String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Unknown"
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "Unknown"
+        return "\(version) (\(build))"
     }
 }

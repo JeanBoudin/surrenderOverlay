@@ -6,7 +6,24 @@
         <description>Most recent updates to SurrenderOverlay</description>
         <language>fr</language>
 
-        <!-- Nouvelle version v1.0.3 -->
+        <!-- Version 1.0.5 - Affichage de la version dans les settings -->
+        <item>
+            <title>Version 1.0.5</title>
+            <sparkle:releaseNotesLink>
+                https://github.com/JeanBoudin/surrenderOverlay/releases/tag/v1.0.5
+            </sparkle:releaseNotesLink>
+            <pubDate>Mon, 06 Jan 2026 16:55:00 +0000</pubDate>
+            <enclosure
+                    url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.5/SurrenderOverlay-1.0.5.zip"
+                    sparkle:version="5"
+                    sparkle:shortVersionString="1.0.5"
+                    sparkle:edSignature="qU8IwcQDISHxVnRLmQSBgjSpRsGC3h7NOWUWOFMutLnhswwq6ivTHQhiyshUFD46U56kH3TgUSMD6KwTTOo2Dg=="
+                    length="1333763"
+                    type="application/octet-stream"
+            />
+        </item>
+
+        <!-- Version 1.0.4 -->
         <item>
             <title>Version 1.0.4</title>
             <sparkle:releaseNotesLink>
