@@ -14,7 +14,7 @@
             </sparkle:releaseNotesLink>
             <pubDate>Mon, 06 Jan 2026 10:00:00 +0000</pubDate>
             <enclosure
-                    url="https://github.com/JeanBoudin/surrenderOverlay/archive/refs/tags/v1.0.3.zip"
+                    url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.3/SurrenderOverlay-1.0.3.zip"
                     sparkle:version="3"
                     sparkle:shortVersionString="1.0.3"
                     length="1328965"
