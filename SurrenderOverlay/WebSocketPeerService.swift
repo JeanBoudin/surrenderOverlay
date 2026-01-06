@@ -214,6 +214,9 @@ final class WebSocketPeerService: ObservableObject {
     private let serverURL: String
     private let peerId: String
     private let peerName: String
+    private var pingTimer: Timer?
+    private var reconnectAttempts = 0
+    private let maxReconnectDelay: TimeInterval = 30.0
 
     // Callbacks matching PeerService interface
     var onSurrenderRequest: ((SurrenderRequestPayload, WSPeer) -> Void)?
@@ -300,10 +303,38 @@ final class WebSocketPeerService: ObservableObject {
     }
 
     func disconnect() {
+        stopPingTimer()
         socket?.disconnect()
         socket = nil
         isConnected = false
         connectedPeers = []
+    }
+
+    // MARK: - Ping/Pong for Keep-Alive
+
+    private func startPingTimer() {
+        stopPingTimer()
+
+        // Send ping every 20 seconds to keep connection alive
+        pingTimer = Timer.scheduledTimer(withTimeInterval: 20.0, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.sendPing()
+            }
+        }
+
+        print("💓 Started heartbeat timer")
+    }
+
+    private func stopPingTimer() {
+        pingTimer?.invalidate()
+        pingTimer = nil
+    }
+
+    private func sendPing() {
+        struct PingMessage: Codable {
+            let type = "ping"
+        }
+        sendMessage(PingMessage())
     }
 
     // MARK: - Send Messages
@@ -587,6 +618,12 @@ extension WebSocketPeerService: WebSocketDelegate {
         switch event {
         case .connected(_):
             print("✅ WebSocket connected")
+            isConnected = true
+            reconnectAttempts = 0  // Reset reconnect counter
+
+            // Start heartbeat to keep connection alive
+            startPingTimer()
+
             // Register immediately
             let registerMsg = WSRegisterMessage(
                 peerId: peerId,
@@ -598,12 +635,19 @@ extension WebSocketPeerService: WebSocketDelegate {
             print("❌ WebSocket disconnected: \(reason) (code: \(code))")
             isConnected = false
             connectedPeers = []
+            stopPingTimer()
 
-            // Attempt to reconnect after 3 seconds
+            // Exponential backoff: 2s, 4s, 8s, 16s, max 30s
+            reconnectAttempts += 1
+            let delay = min(pow(2.0, Double(reconnectAttempts)), maxReconnectDelay)
+
+            print("🔄 Will attempt reconnect #\(reconnectAttempts) in \(Int(delay))s...")
+
+            // Attempt to reconnect with exponential backoff
             Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 3_000_000_000)
+                try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
                 if !isConnected {
-                    print("🔄 Attempting to reconnect...")
+                    print("🔄 Reconnecting...")
                     connect()
                 }
             }
