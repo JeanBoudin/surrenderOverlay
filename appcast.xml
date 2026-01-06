@@ -6,16 +6,16 @@
         <description>Most recent updates to SurrenderOverlay</description>
         <language>fr</language>
 
-        <!-- Nouvelle version v1.0.1 -->
+        <!-- Nouvelle version v1.0.3 -->
         <item>
             <title>Version 1.0.3</title>
             <sparkle:releaseNotesLink>
                 https://github.com/JeanBoudin/surrenderOverlay/releases/tag/v1.0.3
             </sparkle:releaseNotesLink>
-            <pubDate>Thu, 19 Dec 2024 14:00:00 +0000</pubDate>
+            <pubDate>Mon, 06 Jan 2026 10:00:00 +0000</pubDate>
             <enclosure
                     url="https://github.com/JeanBoudin/surrenderOverlay/releases/download/v1.0.3/SurrenderOverlay.zip"
-                    sparkle:version="2"
+                    sparkle:version="3"
                     sparkle:shortVersionString="1.0.3"
                     length="1328965"
                     type="application/octet-stream"
